@@ -53,11 +53,11 @@ merge_table as (
     AND customer_id is not null
 )
 ,
-daily_free as (
+cumulate_free as (
 select customer_id, 
        day_time,
        --Calculate cumulate protocol_fee_amount
-       protocol_fee_amount,
+       SUM(protocol_fee_amount) over (partition by customer_id order by day_time) as protocol_fee_amount,
        {{ dbt_utils.surrogate_key(['customer_id', 'day_time']) }} AS composite_key,
        CAST(YEAR(day_time) AS BIGINT) AS year,
        CAST(MONTH(day_time) AS BIGINT) AS month
@@ -65,9 +65,9 @@ from merge_table
 )
 
 select *
-from daily_free
+from cumulate_free
 {% if is_incremental() %}
 -- Only process new or updated records for incremental runs
 -- WHERE day_time >= date_format(date_add(current_date, -1), 'yyyy-MM-dd')
--- WHERE day_time >= date_format(date_add(current_date, -7), 'yyyy-MM-dd')
+WHERE day_time >= date_format(date_add(current_date, -7), 'yyyy-MM-dd')
 {% endif %}
