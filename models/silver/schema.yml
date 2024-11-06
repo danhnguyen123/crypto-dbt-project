@@ -1,0 +1,10 @@
+
+version: 2
+
+sources:
+    - name: silver
+      database: crypto_lakehouse_dev
+      schema: silver
+
+      tables:
+        - name: transaction
