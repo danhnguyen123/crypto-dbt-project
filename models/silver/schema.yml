@@ -8,3 +8,61 @@ sources:
 
       tables:
         - name: transaction
+
+models:
+    - name: vw_transaction
+      description: >
+        Silver transaction view
+      columns:
+          - name: transaction_id
+            description: Transaction identify, primary key for this table
+            tests:
+                - unique:
+                    severity: warn
+                - not_null:
+                    severity: warn
+            data_type: bigint
+          - name: customer_id 
+            description: > 
+                Customer identify
+            data_type: bigint
+          - name: transaction_time 
+            description: > 
+                Transaction timestamp (UTC)
+            data_type: timestamp
+          - name: execution_plan 
+            description: > 
+                Execution plan type
+            data_type: string
+          - name: pool_id 
+            description: > 
+                Pool
+            data_type: array
+          - name: order_book_id 
+            description: > 
+                Order book
+            data_type: array
+          - name: protocol_fee_token 
+            description: > 
+                Protocol free token for transaction
+            data_type: string
+          - name: protocol_fee_amount 
+            description: > 
+                Protocol free for transaction
+            data_type: bigint
+          - name: swap_count 
+            description: > 
+                Number of swap count
+            data_type: int
+          - name: network 
+            description: > 
+                Network chain
+            data_type: string
+          - name: txn_date 
+            description: > 
+                Transaction date 
+            data_type: string
+          - name: load_timestamp 
+            description: > 
+                Ingestion time (UTC)
+            data_type: timestamp
